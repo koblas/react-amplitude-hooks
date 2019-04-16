@@ -46,7 +46,9 @@ export function Amplitude(props: Props) {
   }, [props.userProperties, amplitudeInstance]);
 
   return (
-    <AmplitudeContext.Provider value={{ eventProperties, amplitudeInstance }}>
+    <AmplitudeContext.Provider
+      value={{ eventProperties: { ...eventProperties, ...(props.eventProperties || {}) }, amplitudeInstance }}
+    >
       {typeof props.children === "function"
         ? props.children({ logEvent: logEvent, instrument: instrument })
         : props.children || null}
