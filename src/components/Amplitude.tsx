@@ -54,19 +54,21 @@ export function useAmplitude(eventProperties: object = {}, instanceName: string 
 export function Amplitude(props: Props) {
   const { logEvent, instrument, eventProperties, amplitudeInstance } = useAmplitude(undefined, props.instanceName);
 
-  React.useEffect(() => {
-    if (amplitudeInstance) {
-      amplitudeInstance.setUserProperties(props.userProperties);
-    }
-  }, [props.userProperties, amplitudeInstance]);
+  // This is API compatible with Amplitude's API, but weird when you think about it
+  React.useMemo(
+    () => () => {
+      if (props.userProperties && amplitudeInstance) {
+        amplitudeInstance.setUserProperties(props.userProperties);
+      }
+    },
+    [props.userProperties, amplitudeInstance]
+  )();
 
   return (
     <AmplitudeContext.Provider
       value={{ eventProperties: { ...eventProperties, ...(props.eventProperties || {}) }, amplitudeInstance }}
     >
-      {typeof props.children === "function"
-        ? props.children({ logEvent: logEvent, instrument: instrument })
-        : props.children || null}
+      {typeof props.children === "function" ? props.children({ logEvent, instrument }) : props.children || null}
     </AmplitudeContext.Provider>
   );
 }
