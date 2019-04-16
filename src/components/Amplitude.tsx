@@ -9,35 +9,50 @@ type Props = {
   userProperties?: object;
 };
 
-export function useAmplitude(instanceName: string = "$default_instance") {
+export function useAmplitude(eventProperties: object = {}, instanceName: string = "$default_instance") {
   const { amplitudeInstance, eventProperties: inheritedProperties } = useAmplitudeContext();
 
-  function logEvent(eventType: string, eventProperties: object = {}, callback?: any) {
-    if (!amplitudeInstance) {
-      return;
-    }
-    amplitudeInstance.logEvent(eventType, { ...inheritedProperties, ...eventProperties }, callback);
-  }
+  return React.useMemo(() => {
+    function logEvent(eventType: string, eventPropertiesIn: object = {}, callback?: any) {
+      if (!amplitudeInstance) {
+        return;
+      }
 
-  function instrument<T extends Function>(eventType: string, func: T): T {
-    function fn(...params: any) {
-      const retVal = func ? func(...params) : undefined;
-      logEvent(eventType);
-      return retVal;
-    }
-    return fn as any;
-  }
+      let computed = inheritedProperties;
+      if (typeof eventProperties === "function") {
+        computed = eventProperties(computed);
+      } else {
+        computed = { ...computed, ...(eventProperties || {}) };
+      }
+      if (typeof eventPropertiesIn === "function") {
+        computed = eventPropertiesIn(computed);
+      } else {
+        computed = { ...computed, ...(eventPropertiesIn || {}) };
+      }
 
-  return {
-    logEvent: logEvent,
-    instrument: instrument,
-    eventProperties: inheritedProperties,
-    amplitudeInstance: amplitudeInstance
-  };
+      amplitudeInstance.logEvent(eventType, computed, callback);
+    }
+
+    function instrument<T extends Function>(eventType: string, func: T): T {
+      function fn(...params: any) {
+        const retVal = func ? func(...params) : undefined;
+        logEvent(eventType);
+        return retVal;
+      }
+      return fn as any;
+    }
+
+    return {
+      logEvent: logEvent,
+      instrument: instrument,
+      eventProperties: inheritedProperties,
+      amplitudeInstance: amplitudeInstance
+    };
+  }, [eventProperties, amplitudeInstance, inheritedProperties, instanceName]);
 }
 
 export function Amplitude(props: Props) {
-  const { logEvent, instrument, eventProperties, amplitudeInstance } = useAmplitude(props.instanceName);
+  const { logEvent, instrument, eventProperties, amplitudeInstance } = useAmplitude(undefined, props.instanceName);
 
   React.useEffect(() => {
     if (amplitudeInstance) {

@@ -4,17 +4,18 @@ import { useAmplitude } from "./Amplitude";
 
 type Props = {
   eventProperties: object | Function;
+  value: any;
   eventType: string;
   instanceName?: string;
   children: React.ReactNode;
 };
 
 export function LogOnChange(props: Props) {
-  const { logEvent } = useAmplitude(props.instanceName);
+  const { logEvent } = useAmplitude(undefined, props.instanceName);
 
-  React.useEffect(function() {
+  React.useEffect(() => {
     logEvent(props.eventType, props.eventProperties);
-  });
+  }, [props.eventType, props.eventProperties, props.value]);
 
   return props.children || null;
 }

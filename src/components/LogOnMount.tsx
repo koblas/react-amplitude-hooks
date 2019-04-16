@@ -10,11 +10,11 @@ type Props = {
 };
 
 export function LogOnMount(props: Props) {
-  const { logEvent } = useAmplitude(props.instanceName);
+  const { logEvent } = useAmplitude(undefined, props.instanceName);
 
-  React.useEffect(function() {
+  React.useEffect(() => {
     logEvent(props.eventType, props.eventProperties);
-  }, []);
+  }, [props.eventType, props.eventProperties]);
 
   return props.children || null;
 }
