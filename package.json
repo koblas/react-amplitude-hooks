@@ -1,0 +1,28 @@
+{
+  "author": {
+    "name": "David Koblas"
+  },
+  "dependencies": {
+    "prop-types": "^15.7.2"
+  },
+  "description": "React Amplitude Components with hook support",
+  "devDependencies": {
+    "@types/amplitude-js": "^4.4.1",
+    "@types/prop-types": "^15.7.0",
+    "@types/react": "^16.8.13",
+    "prettier": "^1.17.0",
+    "typescript": "^3.4.3"
+  },
+  "license": "ISC",
+  "main": "dist/index.js",
+  "name": "react-amplitude-hooks",
+  "peerDependencies": {
+    "react": "^16.6.0-0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "types": "dist/index.d.ts",
+  "version": "0.0.4"
+}
