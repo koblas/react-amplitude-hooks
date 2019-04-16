@@ -24,22 +24,31 @@ export function useAmplitudeContext() {
   return React.useContext(AmplitudeContext);
 }
 
-export function AmplitudeProvider(props: Props) {
-  React.useEffect(
-    function() {
-      if (isValidAmplitudeInstance(props.amplitudeInstance)) {
-        if (props.apiKey) {
-          props.amplitudeInstance.init(props.apiKey);
-        }
-        if (props.userId) {
-          props.amplitudeInstance.setUserId(props.userId);
-        }
-      } else {
-        console.error('AmplitudeProvider was not provided with a valid "amplitudeInstance" prop.');
+function initAmplitude(apiKey: string, userId: any, amplitudeInstance: AmplitudeClient) {
+  return () => {
+    if (isValidAmplitudeInstance(amplitudeInstance)) {
+      if (apiKey) {
+        amplitudeInstance.init(apiKey);
       }
-    },
-    [props.apiKey, props.userId, props.amplitudeInstance]
-  );
+      if (userId) {
+        amplitudeInstance.setUserId(userId);
+      }
+    }
+  };
+}
+
+export function AmplitudeProvider(props: Props) {
+  const { apiKey, userId, amplitudeInstance } = props;
+
+  // Memoize so it's only really called if the params change
+  const init = React.useMemo(() => initAmplitude(apiKey, userId, amplitudeInstance), [
+    apiKey,
+    userId,
+    amplitudeInstance
+  ]);
+
+  // We need to init such that LogOnMount is happy
+  init();
 
   return (
     <AmplitudeContext.Provider
