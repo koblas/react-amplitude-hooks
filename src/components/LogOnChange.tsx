@@ -10,18 +10,18 @@ type Props = {
   children?: React.ReactNode;
 };
 
-export function LogOnChange(props: Props) {
+export const LogOnChange: React.StatelessComponent<Props> = (props: Props) => {
   const { logEvent, amplitudeInstance } = useAmplitude(undefined, props.instanceName);
 
   React.useEffect(() => {
     logEvent(props.eventType, props.eventProperties);
   }, [props.eventType, props.eventProperties, props.value, amplitudeInstance]);
 
-  return props.children || null;
-}
+  return props.children || (null as any);
+};
 
 LogOnChange.propTypes = {
-  debounceInterval: PropTypes.number,
+  // debounceInterval: PropTypes.number,
   eventProperties: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   eventType: PropTypes.string.isRequired,
   instanceName: PropTypes.string,
