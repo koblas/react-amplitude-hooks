@@ -6,7 +6,7 @@ import { AmplitudeClient } from "amplitude-js";
 declare type Props = {
   amplitudeInstance: AmplitudeClient;
   apiKey: string;
-  userId: string;
+  userId?: string;
   children: React.ReactNode;
 };
 
