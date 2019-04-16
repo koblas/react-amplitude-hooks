@@ -3,10 +3,10 @@ import * as React from "react";
 import { useAmplitude } from "./Amplitude";
 
 type Props = {
-  eventProperties: object | Function;
+  eventProperties?: object | Function;
   eventType: string;
   instanceName?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 export function LogOnMount(props: Props) {
