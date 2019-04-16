@@ -1,0 +1,29 @@
+{
+  "name": "new",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "homepage": "https://codesandbox.io/s/new",
+  "main": "src/index.js",
+  "dependencies": {
+    "amplitude-js": "^5.2.2",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-amplitude-hooks": "^0.9.2",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^2.1.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
