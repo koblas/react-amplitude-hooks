@@ -37,11 +37,13 @@ export function useAmplitude(instanceName: string = "$default_instance") {
 }
 
 export function Amplitude(props: Props) {
-  var _a = useAmplitude(props.instanceName),
-    logEvent = _a.logEvent,
-    instrument = _a.instrument,
-    eventProperties = _a.eventProperties,
-    amplitudeInstance = _a.amplitudeInstance;
+  const { logEvent, instrument, eventProperties, amplitudeInstance } = useAmplitude(props.instanceName);
+
+  React.useEffect(() => {
+    if (amplitudeInstance) {
+      amplitudeInstance.setUserProperties(props.userProperties);
+    }
+  }, [props.userProperties, amplitudeInstance]);
 
   return (
     <AmplitudeContext.Provider value={{ eventProperties, amplitudeInstance }}>
