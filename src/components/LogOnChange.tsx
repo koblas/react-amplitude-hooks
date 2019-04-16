@@ -11,11 +11,11 @@ type Props = {
 };
 
 export function LogOnChange(props: Props) {
-  const { logEvent } = useAmplitude(undefined, props.instanceName);
+  const { logEvent, amplitudeInstance } = useAmplitude(undefined, props.instanceName);
 
   React.useEffect(() => {
     logEvent(props.eventType, props.eventProperties);
-  }, [props.eventType, props.eventProperties, props.value]);
+  }, [props.eventType, props.eventProperties, props.value, amplitudeInstance]);
 
   return props.children || null;
 }
