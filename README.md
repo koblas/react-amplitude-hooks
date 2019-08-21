@@ -13,7 +13,7 @@ This library is designed to be fully API compatible with the @amplitude/react-am
 
 ## Example: Instrumenting Tic-Tac-Toe (From Facebook's [Intro to React Tutorial](https://reactjs.org/tutorial/tutorial.html))
 
-This is a hooks re-write of the example for demonstration purposes. (TODO_TODO)
+This is a hooks re-write of the example for demonstration purposes.
 
 Events logged:
  - start game
