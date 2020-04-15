@@ -1,12 +1,13 @@
 import * as PropTypes from "prop-types";
 import * as React from "react";
 import { isValidAmplitudeInstance } from "../lib/validation";
-import { AmplitudeClient } from "amplitude-js";
+import {AmplitudeClient, Config} from "amplitude-js";
 
 declare type Props = {
   amplitudeInstance: AmplitudeClient;
   apiKey: string;
   userId?: string;
+  config?: Config;
   children: React.ReactNode;
 };
 
@@ -24,11 +25,11 @@ export function useAmplitudeContext() {
   return React.useContext(AmplitudeContext);
 }
 
-function initAmplitude(apiKey: string, userId: any, amplitudeInstance: AmplitudeClient) {
+function initAmplitude(amplitudeInstance: AmplitudeClient, apiKey: string, userId?: string, config?: Config) {
   return () => {
     if (isValidAmplitudeInstance(amplitudeInstance)) {
       if (apiKey) {
-        amplitudeInstance.init(apiKey);
+        amplitudeInstance.init(apiKey, undefined, config);
       }
       if (userId) {
         amplitudeInstance.setUserId(userId);
@@ -38,13 +39,14 @@ function initAmplitude(apiKey: string, userId: any, amplitudeInstance: Amplitude
 }
 
 export function AmplitudeProvider(props: Props) {
-  const { apiKey, userId, amplitudeInstance } = props;
+  const { amplitudeInstance, apiKey, userId, config } = props;
 
   // Memoize so it's only really called if the params change
-  const init = React.useMemo(() => initAmplitude(apiKey, userId, amplitudeInstance), [
+  const init = React.useMemo(() => initAmplitude(amplitudeInstance, apiKey, userId, config), [
+    amplitudeInstance,
     apiKey,
     userId,
-    amplitudeInstance
+    config,
   ]);
 
   // We need to init such that LogOnMount is happy
@@ -65,5 +67,6 @@ export function AmplitudeProvider(props: Props) {
 AmplitudeProvider.propTypes = {
   amplitudeInstance: PropTypes.object.isRequired,
   apiKey: PropTypes.string,
-  userId: PropTypes.string
+  userId: PropTypes.string,
+  config: PropTypes.object
 };
