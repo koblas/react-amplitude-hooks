@@ -64,6 +64,11 @@ export function Amplitude(props: Props) {
     [props.userProperties, amplitudeInstance]
   )();
 
+  // If we're not providng any additional properties, just get out of the way and call the component
+  if (!eventProperties) {
+    return typeof props.children === "function" ? props.children({ logEvent, instrument }) : props.children || null;
+  }
+
   return (
     <AmplitudeContext.Provider
       value={{ eventProperties: { ...eventProperties, ...(props.eventProperties || {}) }, amplitudeInstance }}

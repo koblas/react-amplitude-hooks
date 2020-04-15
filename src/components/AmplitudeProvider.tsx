@@ -1,11 +1,17 @@
 import * as PropTypes from "prop-types";
 import * as React from "react";
 import { isValidAmplitudeInstance } from "../lib/validation";
-import {AmplitudeClient, Config} from "amplitude-js";
+import { AmplitudeClient, Config } from "amplitude-js";
 
 declare type Props = {
-  amplitudeInstance: AmplitudeClient;
+  ///
+  // should be a AmplitudeClient -- but not requiring this
+  amplitudeInstance: any;
+  ///
+  // Pass empty "" if you're testing/development
   apiKey: string;
+  ///
+  // User ID to identify this session with
   userId?: string;
   config?: Config;
   children: React.ReactNode;
@@ -18,7 +24,7 @@ declare type AmplitudeContextType = {
 };
 
 export const AmplitudeContext = React.createContext<AmplitudeContextType>({
-  eventProperties: {}
+  eventProperties: {},
 });
 
 export function useAmplitudeContext() {
@@ -56,7 +62,7 @@ export function AmplitudeProvider(props: Props) {
     <AmplitudeContext.Provider
       value={{
         amplitudeInstance: props.amplitudeInstance,
-        eventProperties: {}
+        eventProperties: {},
       }}
     >
       {props.children}
@@ -68,5 +74,5 @@ AmplitudeProvider.propTypes = {
   amplitudeInstance: PropTypes.object.isRequired,
   apiKey: PropTypes.string,
   userId: PropTypes.string,
-  config: PropTypes.object
+  config: PropTypes.object,
 };
