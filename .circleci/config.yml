@@ -40,7 +40,7 @@ jobs:
       - persist_to_workspace:
           root: ~/repo
           paths:
-            - lib
+            - dist
             - package*
             - node_modules
             - LICENSE.txt
