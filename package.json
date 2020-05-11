@@ -51,5 +51,5 @@
     ]
   },
   "types": "dist/index.d.ts",
-  "version": "0.9.14"
+  "version": "0.10.0"
 }
