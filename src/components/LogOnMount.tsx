@@ -10,11 +10,11 @@ type Props = {
 };
 
 export const LogOnMount: React.StatelessComponent<Props> = (props: Props) => {
-  const { logEvent, amplitudeInstance } = useAmplitude(undefined, props.instanceName);
+  const { logEvent } = useAmplitude(undefined, props.instanceName);
 
   React.useEffect(() => {
     logEvent(props.eventType, props.eventProperties);
-  }, [props.eventType, props.eventProperties, amplitudeInstance]);
+  }, []);
 
   return props.children || (null as any);
 };
@@ -22,5 +22,5 @@ export const LogOnMount: React.StatelessComponent<Props> = (props: Props) => {
 LogOnMount.propTypes = {
   eventProperties: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   eventType: PropTypes.string.isRequired,
-  instanceName: PropTypes.string
+  instanceName: PropTypes.string,
 };
