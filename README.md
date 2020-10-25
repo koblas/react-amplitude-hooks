@@ -6,7 +6,7 @@ A React component library for easy product analytics instrumentation.
 
 ## Improvement from the @amplitude/react-amplitude library
 
-This library is designed to be fully API compatible with the @amplitude/react-amplitude library, but taking advantage of the modern React features of hooks and context API.
+This library is designed to be fully API compatible with the [@amplitude/react-amplitude](https://github.com/amplitude/react-amplitude) library, but taking advantage of the modern React features of hooks and context API.
 
 - Hook support `const { instrument, logEvent } = useAmplitude();`
 - TypeScript support
