@@ -64,15 +64,22 @@ export function Amplitude(props: Props) {
     [props.userProperties, amplitudeInstance]
   )();
 
-  // If we're not providng any additional properties, just get out of the way and call the component
+  // If we're not providing any additional properties, just get out of the way and call the component
   if (!eventProperties) {
     return typeof props.children === "function" ? props.children({ logEvent, instrument }) : props.children || null;
   }
+  
+  // Memoizes the value prop object to avoid re-renders when eventProperties or amplitudeInstance don't change
+  const value = React.useMemo(
+    () => ({
+      eventProperties: {...eventProperties, ...(props.eventProperties || {})},
+      amplitudeInstance,
+    }),
+    [props.eventProperties, amplitudeInstance]
+  );
 
   return (
-    <AmplitudeContext.Provider
-      value={{ eventProperties: { ...eventProperties, ...(props.eventProperties || {}) }, amplitudeInstance }}
-    >
+    <AmplitudeContext.Provider value={value} >
       {typeof props.children === "function" ? props.children({ logEvent, instrument }) : props.children || null}
     </AmplitudeContext.Provider>
   );
