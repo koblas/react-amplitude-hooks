@@ -13,7 +13,11 @@ export function useAmplitude(eventProperties: object = {}, instanceName: string 
   const { amplitudeInstance, eventProperties: inheritedProperties } = useAmplitudeContext();
 
   return React.useMemo(() => {
-    function logEvent(eventType: string, eventPropertiesIn: object = {}, callback?: any) {
+    function logEvent<T extends string>(
+      eventType: T,
+      eventPropertiesIn: object = {},
+      callback?: any
+    ) {
       if (!amplitudeInstance) {
         return;
       }
