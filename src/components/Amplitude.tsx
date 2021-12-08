@@ -9,6 +9,8 @@ type Props = {
   userProperties?: object;
 };
 
+export type Callback = (responseCode: number, responseBody: string, details?: { reason: string }) => void;
+
 export function useAmplitude(eventProperties: object = {}, instanceName: string = "$default_instance") {
   const { amplitudeInstance, eventProperties: inheritedProperties } = useAmplitudeContext();
 
@@ -16,7 +18,7 @@ export function useAmplitude(eventProperties: object = {}, instanceName: string 
     function logEvent<T extends string>(
       eventType: T,
       eventPropertiesIn: object = {},
-      callback?: any
+      callback?: Callback
     ) {
       if (!amplitudeInstance) {
         return;
