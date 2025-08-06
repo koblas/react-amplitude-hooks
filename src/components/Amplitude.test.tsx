@@ -10,14 +10,14 @@ function buildMockAmplitude() {
     setUserId: jest.fn(),
     setUserProperties: jest.fn(),
     logEvent: jest.fn(),
-  } as any as AmplitudeClient;
+  } as unknown as AmplitudeClient;
 }
 
 test('basic', () => {
   const amp = buildMockAmplitude();
 
   function TestComponent() {
-    const { logEvent } = useAmplitude((update: any) => ({
+    const { logEvent } = useAmplitude((update: Record<string, unknown>) => ({
       myProp: 33,
       ...update,
     }));
@@ -45,7 +45,13 @@ test('legacy', () => {
   render(
     <AmplitudeProvider amplitudeInstance={amp} apiKey="1234">
       <Amplitude userProperties={{ name: 'John Smith' }}>
-        {({ logEvent, instrument }: any) => (
+        {({
+          logEvent,
+          instrument,
+        }: {
+          logEvent: (eventType: string, eventProperties?: object) => void;
+          instrument: (eventType: string, func: () => boolean) => () => boolean;
+        }) => (
           <>
             <button
               data-testid="foo"
@@ -83,4 +89,49 @@ test('missing context', () => {
   render(<TestComponent />);
 
   expect(screen.getByTestId('foo')).toBeInTheDocument();
+});
+
+test('when eventProperties is falsy and children is falsy - returns null', () => {
+  const amp = buildMockAmplitude();
+  const { container } = render(
+    <AmplitudeProvider amplitudeInstance={amp} apiKey="1234">
+      <Amplitude eventProperties={undefined}>{null}</Amplitude>
+    </AmplitudeProvider>,
+  );
+
+  // The component should render nothing (null)
+  expect(container.firstChild).toBeNull();
+});
+
+test('logEvent with eventPropertiesIn as a function', () => {
+  const amp = buildMockAmplitude();
+
+  function TestComponent() {
+    const { logEvent } = useAmplitude({ baseProperty: 'base' });
+
+    // Using a function as eventPropertiesIn
+    logEvent('test', (computed: Record<string, unknown>) => ({
+      ...computed,
+      additionalProperty: 'added',
+    }));
+
+    return <div data-testid="function-props">test with function props</div>;
+  }
+
+  render(
+    <AmplitudeProvider amplitudeInstance={amp} apiKey="1234">
+      <TestComponent />
+    </AmplitudeProvider>,
+  );
+
+  expect(screen.getByTestId('function-props')).toBeInTheDocument();
+  expect(amp.logEvent).toHaveBeenCalledTimes(1);
+  expect(amp.logEvent).toHaveBeenCalledWith(
+    'test',
+    expect.objectContaining({
+      baseProperty: 'base',
+      additionalProperty: 'added',
+    }),
+    undefined,
+  );
 });

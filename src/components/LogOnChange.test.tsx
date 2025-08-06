@@ -20,7 +20,7 @@ test('logs event on value change', () => {
   const mockLogEvent = jest.fn();
 
   // Create a fresh mock for each test
-  (amplitude.useAmplitude as any).mockReturnValue({
+  (amplitude.useAmplitude as jest.Mock).mockReturnValue({
     logEvent: mockLogEvent,
     instrument: jest.fn(),
     amplitudeProvider: 'test',

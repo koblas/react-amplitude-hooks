@@ -20,7 +20,7 @@ test('logs event on mount', () => {
   const mockLogEvent = jest.fn();
 
   // Create a fresh mock for each test
-  (amplitude.useAmplitude as any).mockReturnValue({
+  (amplitude.useAmplitude as jest.Mock).mockReturnValue({
     logEvent: mockLogEvent,
     instrument: jest.fn(),
     amplitudeProvider: 'test',
@@ -40,7 +40,7 @@ test('logs event with properties', () => {
   const eventProperties = { property1: 'value1', property2: 'value2' };
 
   // Create a fresh mock for each test
-  (amplitude.useAmplitude as any).mockReturnValue({
+  (amplitude.useAmplitude as jest.Mock).mockReturnValue({
     logEvent: mockLogEvent,
     instrument: jest.fn(),
     amplitudeProvider: 'test',
@@ -59,7 +59,7 @@ test('renders children', () => {
   const mockLogEvent = jest.fn();
 
   // Create a fresh mock for each test
-  (amplitude.useAmplitude as any).mockReturnValue({
+  (amplitude.useAmplitude as jest.Mock).mockReturnValue({
     logEvent: mockLogEvent,
     instrument: jest.fn(),
     amplitudeProvider: 'test',
@@ -81,7 +81,7 @@ test('uses specified instance name', () => {
   const mockLogEvent = jest.fn();
 
   // Create a fresh mock for each test
-  (amplitude.useAmplitude as any).mockReturnValue({
+  (amplitude.useAmplitude as jest.Mock).mockReturnValue({
     logEvent: mockLogEvent,
     instrument: jest.fn(),
     amplitudeProvider: 'test',

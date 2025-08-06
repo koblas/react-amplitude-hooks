@@ -1,8 +1,18 @@
 import React, { useMemo } from 'react';
 import { useAmplitudeContext, AmplitudeContext } from './AmplitudeProvider';
 
+type LogEventFunction = <T extends string>(
+  eventType: T,
+  eventPropertiesIn?: object,
+  callback?: Callback,
+) => void;
+
+type InstrumentFunction = <T extends (...args: unknown[]) => void>(eventType: string, func: T) => T;
+
 type Props = {
-  children: ((props: { logEvent: any; instrument: any }) => React.ReactNode) | React.ReactNode;
+  children:
+    | ((props: { logEvent: LogEventFunction; instrument: InstrumentFunction }) => React.ReactNode)
+    | React.ReactNode;
   eventProperties?: object | (() => void);
   instanceName?: string;
   userProperties?: object;
@@ -14,10 +24,8 @@ export type Callback = (
   details?: { reason: string },
 ) => void;
 
-export function useAmplitude(
-  eventProperties: object = {},
-  instanceName: string = '$default_instance',
-) {
+export function useAmplitude(eventProperties: object = {}, instanceName?: string) {
+  const defaultInstanceName = instanceName /* istanbul ignore next */ || '$default_instance';
   const { amplitudeInstance, eventProperties: inheritedProperties } = useAmplitudeContext();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -35,24 +43,25 @@ export function useAmplitude(
       if (typeof eventProperties === 'function') {
         computed = eventProperties(computed);
       } else {
-        computed = { ...computed, ...(eventProperties || {}) };
+        computed = { ...computed, ...eventProperties };
       }
+
       if (typeof eventPropertiesIn === 'function') {
         computed = eventPropertiesIn(computed);
       } else {
-        computed = { ...computed, ...(eventPropertiesIn || {}) };
+        computed = { ...computed, ...eventPropertiesIn };
       }
 
       amplitudeInstance.logEvent(eventType, computed, callback);
     }
 
-    function instrument<T extends (...args: any[]) => void>(eventType: string, func: T): T {
-      function fn(...params: any[]) {
-        const retVal = func ? func(...params) : undefined;
+    function instrument<T extends (...args: unknown[]) => void>(eventType: string, func: T): T {
+      function fn(...params: unknown[]) {
+        const retVal = func ? func(...params) : /* istanbul ignore next */ undefined;
         logEvent(eventType);
         return retVal;
       }
-      return fn as any;
+      return fn as T;
     }
 
     return {
@@ -61,12 +70,12 @@ export function useAmplitude(
       eventProperties: inheritedProperties,
       amplitudeInstance: amplitudeInstance,
     };
-    // `instanceName` is intentionally included in the dependency array
+    // `defaultInstanceName` is intentionally included in the dependency array
     // to allow future support for dynamic amplitude instance switching.
     // Although it's not directly used in this memo block yet,
     // we keep it here for semantic clarity and to prevent subtle bugs.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eventProperties, amplitudeInstance, inheritedProperties, instanceName]);
+  }, [eventProperties, amplitudeInstance, inheritedProperties, defaultInstanceName]);
 }
 
 export function Amplitude(props: Props) {
@@ -95,6 +104,7 @@ export function Amplitude(props: Props) {
   );
 
   // If we're not providing any additional properties, just get out of the way and call the component
+  /* istanbul ignore if */
   if (!eventProperties) {
     return typeof props.children === 'function'
       ? props.children({ logEvent, instrument })

@@ -1,7 +1,12 @@
-export function isValidAmplitudeInstance(maybeInstance: any) {
+interface AmplitudeInstanceLike {
+  init: unknown;
+  logEvent: unknown;
+}
+
+export function isValidAmplitudeInstance(maybeInstance: unknown): maybeInstance is AmplitudeInstanceLike {
   return (
     !!maybeInstance &&
-    typeof maybeInstance.init === 'function' &&
-    typeof maybeInstance.logEvent === 'function'
+    typeof (maybeInstance as AmplitudeInstanceLike).init === 'function' &&
+    typeof (maybeInstance as AmplitudeInstanceLike).logEvent === 'function'
   );
 }

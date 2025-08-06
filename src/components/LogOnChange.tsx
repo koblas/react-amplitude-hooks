@@ -4,7 +4,7 @@ import { useAmplitude } from './Amplitude';
 
 type Props = {
   eventProperties?: object | (() => void);
-  value: any;
+  value: unknown;
   eventType: string;
   instanceName?: string;
   children?: React.ReactNode;
@@ -17,7 +17,7 @@ export const LogOnChange: React.FC<Props> = (props: Props) => {
     logEvent(props.eventType, props.eventProperties);
   }, [props.value, logEvent, props.eventType, props.eventProperties]);
 
-  return props.children || (null as any);
+  return props.children || null;
 };
 
 LogOnChange.propTypes = {

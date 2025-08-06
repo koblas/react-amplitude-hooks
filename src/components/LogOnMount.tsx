@@ -15,5 +15,5 @@ export const LogOnMount: React.FC<Props> = (props: Props) => {
     logEvent(props.eventType, props.eventProperties);
   }, [logEvent, props.eventProperties, props.eventType]);
 
-  return props.children || (null as any);
+  return props.children || null;
 };

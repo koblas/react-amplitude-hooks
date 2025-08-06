@@ -20,4 +20,5 @@ module.exports = {
       statements: 100,
     },
   },
+  coveragePathIgnorePatterns: ['node_modules'],
 };

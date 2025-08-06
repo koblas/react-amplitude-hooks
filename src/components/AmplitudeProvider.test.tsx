@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import * as validation from '../lib/validation';
-import { AmplitudeProvider } from './AmplitudeProvider';
+import { AmplitudeProvider, useAmplitudeContext } from './AmplitudeProvider';
 import { AmplitudeClient } from 'amplitude-js';
 
 function buildMockAmplitude() {
@@ -9,7 +9,7 @@ function buildMockAmplitude() {
     init: jest.fn(),
     setUserId: jest.fn(),
     logEvent: jest.fn(),
-  } as any as AmplitudeClient;
+  } as unknown as AmplitudeClient;
 }
 
 test('basic', () => {
@@ -40,7 +40,7 @@ test('no-api key', () => {
 });
 
 test('non-valid instance', () => {
-  const amp = {} as any;
+  const amp = {} as unknown as AmplitudeClient;
   render(
     <AmplitudeProvider amplitudeInstance={amp} apiKey="1234">
       <div data-testid="item">text</div>
@@ -60,4 +60,33 @@ test('with user', () => {
 
   expect(screen.getByTestId('item')).toBeInTheDocument();
   expect(amp.setUserId).toHaveBeenCalledTimes(1);
+});
+
+test('useAmplitudeContext hook', () => {
+  const amp = buildMockAmplitude();
+
+  // Create a test component that uses the hook
+  function TestComponent() {
+    const context = useAmplitudeContext();
+
+    // Render the context values to verify they're correct
+    return (
+      <div>
+        <div data-testid="has-instance">{context.amplitudeInstance ? 'true' : 'false'}</div>
+        <div data-testid="has-properties">
+          {Object.keys(context.eventProperties || {}).length === 0 ? 'empty' : 'has-props'}
+        </div>
+      </div>
+    );
+  }
+
+  render(
+    <AmplitudeProvider amplitudeInstance={amp} apiKey="1234">
+      <TestComponent />
+    </AmplitudeProvider>,
+  );
+
+  // Verify the context values are correctly passed through the hook
+  expect(screen.getByTestId('has-instance')).toHaveTextContent('true');
+  expect(screen.getByTestId('has-properties')).toHaveTextContent('empty');
 });

@@ -5,7 +5,7 @@ import { AmplitudeClient, Config } from 'amplitude-js';
 declare type Props = {
   ///
   // should be a AmplitudeClient -- but not requiring this
-  amplitudeInstance: any;
+  amplitudeInstance: AmplitudeClient;
   ///
   // Pass empty "" if you're testing/development
   apiKey: string;
@@ -19,7 +19,7 @@ declare type Props = {
 declare type AmplitudeContextType = {
   amplitudeInstance?: AmplitudeClient;
   getParentContext?(): AmplitudeContextType;
-  eventProperties?: any;
+  eventProperties?: Record<string, unknown>;
 };
 
 export const AmplitudeContext = createContext<AmplitudeContextType>({
