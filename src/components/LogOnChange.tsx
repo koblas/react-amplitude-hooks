@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const LogOnChange: React.FC<Props> = (props: Props) => {
-  const { logEvent } = useAmplitude(undefined);
+  const { logEvent } = useAmplitude(undefined, props.instanceName);
 
   useEffect(() => {
     logEvent(props.eventType, props.eventProperties);
