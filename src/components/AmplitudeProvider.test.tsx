@@ -1,63 +1,63 @@
-import * as React from "react";
-import { mount } from "enzyme";
-import * as validation from "../lib/validation";
-import { AmplitudeProvider } from "./AmplitudeProvider";
-import { AmplitudeClient } from "amplitude-js";
+import * as React from 'react';
+import { render, screen } from '@testing-library/react';
+import * as validation from '../lib/validation';
+import { AmplitudeProvider } from './AmplitudeProvider';
+import { AmplitudeClient } from 'amplitude-js';
 
 function buildMockAmplitude() {
-  return ({
+  return {
     init: jest.fn(),
     setUserId: jest.fn(),
     logEvent: jest.fn(),
-  } as any) as AmplitudeClient;
+  } as any as AmplitudeClient;
 }
 
-test("basic", () => {
-  const isValid = jest.spyOn(validation, "isValidAmplitudeInstance");
+test('basic', () => {
+  const isValid = jest.spyOn(validation, 'isValidAmplitudeInstance');
 
   const amp = buildMockAmplitude();
-  const wrapper = mount(
+  render(
     <AmplitudeProvider amplitudeInstance={amp} apiKey="1234">
-      <div id="item">text</div>
+      <div data-testid="item">text</div>
     </AmplitudeProvider>,
   );
 
-  expect(isValid).toBeCalledTimes(1);
-  expect(amp.init).toBeCalledTimes(1);
-  expect(wrapper.find("#item")).toHaveLength(1);
+  expect(isValid).toHaveBeenCalledTimes(1);
+  expect(amp.init).toHaveBeenCalledTimes(1);
+  expect(screen.getByTestId('item')).toBeInTheDocument();
 });
 
-test("no-api key", () => {
+test('no-api key', () => {
   const amp = buildMockAmplitude();
-  const wrapper = mount(
+  render(
     <AmplitudeProvider amplitudeInstance={amp} apiKey="">
-      <div id="item">text</div>
+      <div data-testid="item">text</div>
     </AmplitudeProvider>,
   );
 
-  expect(amp.init).toBeCalledTimes(0);
-  expect(wrapper.find("#item")).toHaveLength(1);
+  expect(amp.init).toHaveBeenCalledTimes(0);
+  expect(screen.getByTestId('item')).toBeInTheDocument();
 });
 
-test("non-valid instance", () => {
+test('non-valid instance', () => {
   const amp = {} as any;
-  const wrapper = mount(
+  render(
     <AmplitudeProvider amplitudeInstance={amp} apiKey="1234">
-      <div id="item">text</div>
+      <div data-testid="item">text</div>
     </AmplitudeProvider>,
   );
 
-  expect(wrapper.find("#item")).toHaveLength(1);
+  expect(screen.getByTestId('item')).toBeInTheDocument();
 });
 
-test("with user", () => {
+test('with user', () => {
   const amp = buildMockAmplitude();
-  const wrapper = mount(
+  render(
     <AmplitudeProvider amplitudeInstance={amp} apiKey="1234" userId="789">
-      <div id="item">text</div>
+      <div data-testid="item">text</div>
     </AmplitudeProvider>,
   );
 
-  expect(wrapper.find("#item")).toHaveLength(1);
-  expect(amp.setUserId).toBeCalledTimes(1);
+  expect(screen.getByTestId('item')).toBeInTheDocument();
+  expect(amp.setUserId).toHaveBeenCalledTimes(1);
 });

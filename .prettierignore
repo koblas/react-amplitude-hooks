@@ -1,0 +1,10 @@
+# Build artifacts
+dist/
+coverage/
+node_modules/
+
+# Example directory
+example/
+
+# Package files
+package-lock.json

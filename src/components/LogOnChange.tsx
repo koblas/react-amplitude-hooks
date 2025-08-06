@@ -1,21 +1,21 @@
-import * as PropTypes from "prop-types";
-import * as React from "react";
-import { useAmplitude } from "./Amplitude";
+import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
+import { useAmplitude } from './Amplitude';
 
 type Props = {
-  eventProperties?: object | Function;
+  eventProperties?: object | (() => void);
   value: any;
   eventType: string;
   instanceName?: string;
   children?: React.ReactNode;
 };
 
-export const LogOnChange: React.StatelessComponent<Props> = (props: Props) => {
-  const { logEvent } = useAmplitude(undefined, props.instanceName);
+export const LogOnChange: React.FC<Props> = (props: Props) => {
+  const { logEvent } = useAmplitude(undefined);
 
-  React.useEffect(() => {
+  useEffect(() => {
     logEvent(props.eventType, props.eventProperties);
-  }, [props.value]);
+  }, [props.value, logEvent, props.eventType, props.eventProperties]);
 
   return props.children || (null as any);
 };

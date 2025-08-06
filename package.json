@@ -3,23 +3,30 @@
     "name": "David Koblas"
   },
   "dependencies": {
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.8.1"
   },
   "description": "React Amplitude Components with hook support",
   "devDependencies": {
+    "@babel/preset-env": "^7.28.0",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
     "@types/amplitude-js": "^5.8.0",
-    "@types/enzyme": "^3.10.5",
-    "@types/jest": "^25.2.1",
-    "@types/prop-types": "^15.7.3",
-    "@types/react": "^16.9.34",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
-    "jest": "^25.3.0",
-    "prettier": "^2.0.4",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "ts-jest": "^25.3.1",
-    "typescript": "^3.8.3"
+    "@types/jest": "^30.0.0",
+    "@types/prop-types": "^15.7.15",
+    "@types/react": "^19.1.9",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "babel-jest": "^30.0.5",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5",
+    "prettier": "^3.6.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "ts-jest": "^29.4.1",
+    "typescript": "^5.9.2"
   },
   "files": [
     "src",
@@ -35,20 +42,15 @@
   "main": "dist/index.js",
   "name": "react-amplitude-hooks",
   "peerDependencies": {
-    "react": "^16.8.0 || ^17"
+    "react": "^16.8.0 || ^17 || ^18"
   },
   "scripts": {
     "build": "tsc",
-    "test": "jest"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "setupFilesAfterEnv": [
-      "<rootDir>src/setupTests.js"
-    ],
-    "roots": [
-      "<rootDir>/src"
-    ]
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src/",
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx src/ --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\""
   },
   "types": "dist/index.d.ts",
   "version": "0.10.6"

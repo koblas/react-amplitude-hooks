@@ -1,10 +1,11 @@
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8">
-	<title>Tic Tac Toe</title>
-	<script type="text/javascript">
-		(function(e,t){var n=e.amplitude||{_q:[],_iq:{}};var r=t.createElement("script")
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic Tac Toe</title>
+  <script type="text/javascript">
+    (function(e,t){var n=e.amplitude||{_q:[],_iq:{}};var r=t.createElement("script")
     ;r.type="text/javascript";r.async=true
     ;r.src="https://cdn.amplitude.com/libs/amplitude-4.1.0-min.gz.js"
     ;r.onload=function(){if(e.amplitude.runQueuedFunctions){
@@ -28,18 +29,12 @@
     ;e.amplitude=n})(window,document);
 
     amplitude.getInstance().init("737df6b28171adb201918442e02407ac");
-	</script>
-	<script>
-		amplitude.getInstance().logEvent('Viewed Page', {'name': 'Tic Tac Toe', 'source': 'sandbox'});
-	</script>
-
+  </script>
+  <script>
+    amplitude.getInstance().logEvent('Viewed Page', {'name': 'Tic Tac Toe', 'source': 'example'});
+  </script>
 </head>
-
 <body>
-  
-
   <div id="root"></div>
-
 </body>
-
 </html>

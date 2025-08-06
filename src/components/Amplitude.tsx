@@ -1,36 +1,43 @@
-import * as PropTypes from "prop-types";
-import * as React from "react";
-import { useAmplitudeContext, AmplitudeContext } from "./AmplitudeProvider";
+import React, { useMemo } from 'react';
+import { useAmplitudeContext, AmplitudeContext } from './AmplitudeProvider';
 
 type Props = {
-  children: Function | React.ReactNode;
-  eventProperties?: object | Function;
+  children: ((props: { logEvent: any; instrument: any }) => React.ReactNode) | React.ReactNode;
+  eventProperties?: object | (() => void);
   instanceName?: string;
   userProperties?: object;
 };
 
-export type Callback = (responseCode: number, responseBody: string, details?: { reason: string }) => void;
+export type Callback = (
+  responseCode: number,
+  responseBody: string,
+  details?: { reason: string },
+) => void;
 
-export function useAmplitude(eventProperties: object = {}, instanceName: string = "$default_instance") {
+export function useAmplitude(
+  eventProperties: object = {},
+  instanceName: string = '$default_instance',
+) {
   const { amplitudeInstance, eventProperties: inheritedProperties } = useAmplitudeContext();
 
-  return React.useMemo(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useMemo(() => {
     function logEvent<T extends string>(
       eventType: T,
       eventPropertiesIn: object = {},
-      callback?: Callback
+      callback?: Callback,
     ) {
       if (!amplitudeInstance) {
         return;
       }
 
       let computed = inheritedProperties;
-      if (typeof eventProperties === "function") {
+      if (typeof eventProperties === 'function') {
         computed = eventProperties(computed);
       } else {
         computed = { ...computed, ...(eventProperties || {}) };
       }
-      if (typeof eventPropertiesIn === "function") {
+      if (typeof eventPropertiesIn === 'function') {
         computed = eventPropertiesIn(computed);
       } else {
         computed = { ...computed, ...(eventPropertiesIn || {}) };
@@ -39,8 +46,8 @@ export function useAmplitude(eventProperties: object = {}, instanceName: string 
       amplitudeInstance.logEvent(eventType, computed, callback);
     }
 
-    function instrument<T extends Function>(eventType: string, func: T): T {
-      function fn(...params: any) {
+    function instrument<T extends (...args: any[]) => void>(eventType: string, func: T): T {
+      function fn(...params: any[]) {
         const retVal = func ? func(...params) : undefined;
         logEvent(eventType);
         return retVal;
@@ -52,49 +59,53 @@ export function useAmplitude(eventProperties: object = {}, instanceName: string 
       logEvent: logEvent,
       instrument: instrument,
       eventProperties: inheritedProperties,
-      amplitudeInstance: amplitudeInstance
+      amplitudeInstance: amplitudeInstance,
     };
+    // `instanceName` is intentionally included in the dependency array
+    // to allow future support for dynamic amplitude instance switching.
+    // Although it's not directly used in this memo block yet,
+    // we keep it here for semantic clarity and to prevent subtle bugs.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventProperties, amplitudeInstance, inheritedProperties, instanceName]);
 }
 
 export function Amplitude(props: Props) {
-  const { logEvent, instrument, eventProperties, amplitudeInstance } = useAmplitude(undefined, props.instanceName);
+  const { logEvent, instrument, eventProperties, amplitudeInstance } = useAmplitude(
+    undefined,
+    props.instanceName,
+  );
 
   // This is API compatible with Amplitude's API, but weird when you think about it
-  React.useMemo(
+  useMemo(
     () => () => {
       if (props.userProperties && amplitudeInstance) {
         amplitudeInstance.setUserProperties(props.userProperties);
       }
     },
-    [props.userProperties, amplitudeInstance]
+    [props.userProperties, amplitudeInstance],
   )();
+
+  // Memoizes the value prop object to avoid re-renders when eventProperties or amplitudeInstance don't change
+  const value = useMemo(
+    () => ({
+      eventProperties: { ...eventProperties, ...(props.eventProperties || {}) },
+      amplitudeInstance,
+    }),
+    [eventProperties, props.eventProperties, amplitudeInstance],
+  );
 
   // If we're not providing any additional properties, just get out of the way and call the component
   if (!eventProperties) {
-    return typeof props.children === "function" ? props.children({ logEvent, instrument }) : props.children || null;
+    return typeof props.children === 'function'
+      ? props.children({ logEvent, instrument })
+      : props.children || null;
   }
-  
-  // Memoizes the value prop object to avoid re-renders when eventProperties or amplitudeInstance don't change
-  const value = React.useMemo(
-    () => ({
-      eventProperties: {...eventProperties, ...(props.eventProperties || {})},
-      amplitudeInstance,
-    }),
-    [props.eventProperties, amplitudeInstance]
-  );
 
   return (
-    <AmplitudeContext.Provider value={value} >
-      {typeof props.children === "function" ? props.children({ logEvent, instrument }) : props.children || null}
+    <AmplitudeContext.Provider value={value}>
+      {typeof props.children === 'function'
+        ? props.children({ logEvent, instrument })
+        : props.children || null}
     </AmplitudeContext.Provider>
   );
 }
-
-Amplitude.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-  eventProperties: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
-  debounceInterval: PropTypes.number,
-  instanceName: PropTypes.string,
-  userProperties: PropTypes.object
-};

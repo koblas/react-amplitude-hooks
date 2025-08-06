@@ -1,10 +1,10 @@
-import { isValidAmplitudeInstance } from "./validation";
+import { isValidAmplitudeInstance } from './validation';
 
-describe("validation", () => {
-  test("string", () => {
-    expect(isValidAmplitudeInstance("test")).toBe(false);
+describe('validation', () => {
+  test('string', () => {
+    expect(isValidAmplitudeInstance('test')).toBe(false);
   });
-  test("undefined", () => {
+  test('undefined', () => {
     expect(isValidAmplitudeInstance(undefined)).toBe(false);
   });
 });

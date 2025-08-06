@@ -1,19 +1,19 @@
-import * as React from "react";
-import { mount } from "enzyme";
-import { AmplitudeProvider } from "./AmplitudeProvider";
-import { useAmplitude, Amplitude } from "./Amplitude";
-import { AmplitudeClient } from "amplitude-js";
+import * as React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { AmplitudeProvider } from './AmplitudeProvider';
+import { useAmplitude, Amplitude } from './Amplitude';
+import { AmplitudeClient } from 'amplitude-js';
 
 function buildMockAmplitude() {
-  return ({
+  return {
     init: jest.fn(),
     setUserId: jest.fn(),
     setUserProperties: jest.fn(),
     logEvent: jest.fn(),
-  } as any) as AmplitudeClient;
+  } as any as AmplitudeClient;
 }
 
-test("basic", () => {
+test('basic', () => {
   const amp = buildMockAmplitude();
 
   function TestComponent() {
@@ -22,40 +22,40 @@ test("basic", () => {
       ...update,
     }));
 
-    logEvent("test", {
+    logEvent('test', {
       myProp: 33,
     });
 
-    return <div id="foo">test</div>;
+    return <div data-testid="foo">test</div>;
   }
 
-  const wrapper = mount(
+  render(
     <AmplitudeProvider amplitudeInstance={amp} apiKey="1234">
       <TestComponent />
     </AmplitudeProvider>,
   );
 
-  expect(wrapper.find("#foo")).toHaveLength(1);
+  expect(screen.getByTestId('foo')).toBeInTheDocument();
   expect(amp.logEvent).toHaveBeenCalledTimes(1);
 });
 
-test("legacy", () => {
+test('legacy', () => {
   const amp = buildMockAmplitude();
 
-  const wrapper = mount(
+  render(
     <AmplitudeProvider amplitudeInstance={amp} apiKey="1234">
-      <Amplitude userProperties={{ name: "John Smith" }}>
+      <Amplitude userProperties={{ name: 'John Smith' }}>
         {({ logEvent, instrument }: any) => (
           <>
             <button
-              id="foo"
+              data-testid="foo"
               onClick={() => {
-                logEvent("test event");
+                logEvent('test event');
               }}
             >
               Some Text
             </button>
-            <button id="bar" onClick={instrument("test2", () => true)}>
+            <button data-testid="bar" onClick={instrument('test2', () => true)}>
               Some Text
             </button>
           </>
@@ -64,23 +64,23 @@ test("legacy", () => {
     </AmplitudeProvider>,
   );
 
-  expect(wrapper.find("#foo")).toHaveLength(1);
-  wrapper.find("#foo").simulate("click");
-  expect(wrapper.find("#bar")).toHaveLength(1);
-  wrapper.find("#bar").simulate("click");
+  expect(screen.getByTestId('foo')).toBeInTheDocument();
+  fireEvent.click(screen.getByTestId('foo'));
+  expect(screen.getByTestId('bar')).toBeInTheDocument();
+  fireEvent.click(screen.getByTestId('bar'));
   expect(amp.logEvent).toHaveBeenCalledTimes(2);
 });
 
-test("missing context", () => {
+test('missing context', () => {
   function TestComponent() {
     const { logEvent } = useAmplitude({ someAttr: 77 });
 
-    logEvent("test");
+    logEvent('test');
 
-    return <div id="foo">test</div>;
+    return <div data-testid="foo">test</div>;
   }
 
-  const wrapper = mount(<TestComponent />);
+  render(<TestComponent />);
 
-  expect(wrapper.find("#foo")).toHaveLength(1);
+  expect(screen.getByTestId('foo')).toBeInTheDocument();
 });
