@@ -52,7 +52,10 @@ export function AmplitudeProvider(props: Props) {
   const { amplitudeInstance, apiKey, userId, config } = props;
 
   // Memoize so it's only really called if the params change
-  const init = initAmplitude(amplitudeInstance, apiKey, userId, config);
+  const init = React.useMemo(
+    () => initAmplitude(amplitudeInstance, apiKey, userId, config),
+    [amplitudeInstance, apiKey, userId, config],
+  );
 
   // We need to init such that LogOnMount is happy
   init();
