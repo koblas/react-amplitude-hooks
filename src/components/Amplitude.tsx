@@ -28,7 +28,6 @@ export function useAmplitude(eventProperties: object = {}, instanceName?: string
   const defaultInstanceName = instanceName /* istanbul ignore next */ || '$default_instance';
   const { amplitudeInstance, eventProperties: inheritedProperties } = useAmplitudeContext();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   return useMemo(() => {
     function logEvent<T extends string>(
       eventType: T,

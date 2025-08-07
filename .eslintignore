@@ -1,7 +1,0 @@
-# Build artifacts
-dist/
-coverage/
-node_modules/
-
-# Config files
-*.config.js

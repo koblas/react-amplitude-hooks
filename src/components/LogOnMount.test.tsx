@@ -70,7 +70,7 @@ test('renders children', () => {
   const { getByTestId } = render(
     <LogOnMount eventType="test-event">
       <div data-testid="child">Child content</div>
-    </LogOnMount>
+    </LogOnMount>,
   );
 
   // Verify children are rendered
