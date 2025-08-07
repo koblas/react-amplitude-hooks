@@ -7,7 +7,6 @@
   },
   "description": "React Amplitude Components with hook support",
   "devDependencies": {
-    "@babel/preset-env": "^7.28.0",
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@types/amplitude-js": "^5.8.0",
@@ -16,13 +15,11 @@
     "@types/react": "^19.1.9",
     "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.39.0",
-    "babel-jest": "^30.0.5",
     "eslint": "^9.32.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
-    "prettier": "^3.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "ts-jest": "^29.4.1",
@@ -49,8 +46,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src/",
-    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx src/ --fix",
-    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\""
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx src/ --fix"
   },
   "types": "dist/index.d.ts",
   "version": "0.10.6"

@@ -1,14 +1,15 @@
 export default {
   preset: 'ts-jest',
   transform: {
-    '^.+\\.(ts|tsx)$': [
+    '^.+\\.(ts|tsx|js|jsx)$': [
       'ts-jest',
       {
         tsconfig: 'tsconfig.json',
+        useESM: true,
       },
     ],
-    '^.+\\.(js|jsx)$': 'babel-jest',
   },
+  extensionsToTreatAsEsm: ['.ts', '.tsx', '.jsx'],
   setupFilesAfterEnv: ['<rootDir>src/setupTests.js'],
   roots: ['<rootDir>/src'],
   testEnvironment: 'jsdom',

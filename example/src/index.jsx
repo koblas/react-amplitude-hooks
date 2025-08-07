@@ -5,9 +5,9 @@ const { createRoot } = ReactDOM;
 import amplitude from "amplitude-js";
 import {
   AmplitudeProvider,
-  Amplitude,
   LogOnMount,
-  useAmplitude
+  useAmplitude,
+  Amplitude
 } from "react-amplitude-hooks";
 import "./style.css";
 
