@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      'react-amplitude-hooks': path.resolve(__dirname, '../src')
+      'react-amplitude-hooks': path.resolve(__dirname, '../dist'),
     }
   }
 })
