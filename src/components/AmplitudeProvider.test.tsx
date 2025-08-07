@@ -18,47 +18,47 @@ test('basic', () => {
   const amp = buildMockAmplitude();
   render(
     <AmplitudeProvider amplitudeInstance={amp} apiKey="1234">
-      <div data-testid="item">text</div>
+      <div>text</div>
     </AmplitudeProvider>,
   );
 
   expect(isValid).toHaveBeenCalledTimes(1);
   expect(amp.init).toHaveBeenCalledTimes(1);
-  expect(screen.getByTestId('item')).toBeInTheDocument();
+  expect(screen.getByText('text')).toBeInTheDocument();
 });
 
 test('no-api key', () => {
   const amp = buildMockAmplitude();
   render(
     <AmplitudeProvider amplitudeInstance={amp} apiKey="">
-      <div data-testid="item">text</div>
+      <div>text</div>
     </AmplitudeProvider>,
   );
 
   expect(amp.init).toHaveBeenCalledTimes(0);
-  expect(screen.getByTestId('item')).toBeInTheDocument();
+  expect(screen.getByText('text')).toBeInTheDocument();
 });
 
 test('non-valid instance', () => {
   const amp = {} as unknown as AmplitudeClient;
   render(
     <AmplitudeProvider amplitudeInstance={amp} apiKey="1234">
-      <div data-testid="item">text</div>
+      <div>text</div>
     </AmplitudeProvider>,
   );
 
-  expect(screen.getByTestId('item')).toBeInTheDocument();
+  expect(screen.getByText('text')).toBeInTheDocument();
 });
 
 test('with user', () => {
   const amp = buildMockAmplitude();
   render(
     <AmplitudeProvider amplitudeInstance={amp} apiKey="1234" userId="789">
-      <div data-testid="item">text</div>
+      <div>text</div>
     </AmplitudeProvider>,
   );
 
-  expect(screen.getByTestId('item')).toBeInTheDocument();
+  expect(screen.getByText('text')).toBeInTheDocument();
   expect(amp.setUserId).toHaveBeenCalledTimes(1);
 });
 
@@ -72,8 +72,8 @@ test('useAmplitudeContext hook', () => {
     // Render the context values to verify they're correct
     return (
       <div>
-        <div data-testid="has-instance">{context.amplitudeInstance ? 'true' : 'false'}</div>
-        <div data-testid="has-properties">
+        <div role="status" aria-label="instance status">{context.amplitudeInstance ? 'true' : 'false'}</div>
+        <div role="status" aria-label="properties status">
           {Object.keys(context.eventProperties || {}).length === 0 ? 'empty' : 'has-props'}
         </div>
       </div>
@@ -87,6 +87,6 @@ test('useAmplitudeContext hook', () => {
   );
 
   // Verify the context values are correctly passed through the hook
-  expect(screen.getByTestId('has-instance')).toHaveTextContent('true');
-  expect(screen.getByTestId('has-properties')).toHaveTextContent('empty');
+  expect(screen.getByRole('status', { name: 'instance status' })).toHaveTextContent('true');
+  expect(screen.getByRole('status', { name: 'properties status' })).toHaveTextContent('empty');
 });

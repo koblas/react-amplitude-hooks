@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { LogOnMount } from './LogOnMount';
 import * as amplitude from './Amplitude';
 
@@ -67,14 +67,14 @@ test('renders children', () => {
   });
 
   // Render component with children
-  const { getByTestId } = render(
+  render(
     <LogOnMount eventType="test-event">
-      <div data-testid="child">Child content</div>
+      <div>Child content</div>
     </LogOnMount>,
   );
 
   // Verify children are rendered
-  expect(getByTestId('child')).toBeInTheDocument();
+  expect(screen.getByText('Child content')).toBeInTheDocument();
 });
 
 test('uses specified instance name', () => {

@@ -26,7 +26,7 @@ test('basic', () => {
       myProp: 33,
     });
 
-    return <div data-testid="foo">test</div>;
+    return <div>test</div>;
   }
 
   render(
@@ -35,7 +35,7 @@ test('basic', () => {
     </AmplitudeProvider>,
   );
 
-  expect(screen.getByTestId('foo')).toBeInTheDocument();
+  expect(screen.getByText('test')).toBeInTheDocument();
   expect(amp.logEvent).toHaveBeenCalledTimes(1);
 });
 
@@ -54,15 +54,14 @@ test('legacy', () => {
         }) => (
           <>
             <button
-              data-testid="foo"
               onClick={() => {
                 logEvent('test event');
               }}
             >
-              Some Text
+              Test Log-Event CTA
             </button>
-            <button data-testid="bar" onClick={instrument('test2', () => true)}>
-              Some Text
+            <button onClick={instrument('test2', () => true)}>
+              Test Instrument CTA
             </button>
           </>
         )}
@@ -70,10 +69,13 @@ test('legacy', () => {
     </AmplitudeProvider>,
   );
 
-  expect(screen.getByTestId('foo')).toBeInTheDocument();
-  fireEvent.click(screen.getByTestId('foo'));
-  expect(screen.getByTestId('bar')).toBeInTheDocument();
-  fireEvent.click(screen.getByTestId('bar'));
+  const logEventCTA = screen.getByRole('button', {name: /test log-event cta/i})
+  expect(logEventCTA).toBeInTheDocument();
+  fireEvent.click(logEventCTA);
+
+  const instrumentCTA = screen.getByRole('button', {name: /test instrument cta/i})
+  expect(instrumentCTA).toBeInTheDocument();
+  fireEvent.click(instrumentCTA);
   expect(amp.logEvent).toHaveBeenCalledTimes(2);
 });
 
@@ -88,7 +90,7 @@ test('missing context', () => {
 
   render(<TestComponent />);
 
-  expect(screen.getByTestId('foo')).toBeInTheDocument();
+  expect(screen.getByText("test")).toBeInTheDocument();
 });
 
 test('when eventProperties is falsy and children is falsy - returns null', () => {
@@ -115,7 +117,7 @@ test('logEvent with eventPropertiesIn as a function', () => {
       additionalProperty: 'added',
     }));
 
-    return <div data-testid="function-props">test with function props</div>;
+    return <div>test with function props</div>;
   }
 
   render(
@@ -124,7 +126,7 @@ test('logEvent with eventPropertiesIn as a function', () => {
     </AmplitudeProvider>,
   );
 
-  expect(screen.getByTestId('function-props')).toBeInTheDocument();
+  expect(screen.getByText('test with function props')).toBeInTheDocument();
   expect(amp.logEvent).toHaveBeenCalledTimes(1);
   expect(amp.logEvent).toHaveBeenCalledWith(
     'test',
