@@ -2,16 +2,12 @@
   "author": {
     "name": "David Koblas"
   },
-  "dependencies": {
-    "prop-types": "^15.8.1"
-  },
   "description": "React Amplitude Components with hook support",
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@types/amplitude-js": "^5.8.0",
     "@types/jest": "^30.0.0",
-    "@types/prop-types": "^15.7.15",
     "@types/react": "^19.1.9",
     "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.39.0",
