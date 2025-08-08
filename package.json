@@ -41,8 +41,8 @@
     "build": "tsc",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx src/",
-    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx src/ --fix"
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix"
   },
   "types": "dist/index.d.ts",
   "version": "0.10.6"
