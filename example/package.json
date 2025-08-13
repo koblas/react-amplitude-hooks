@@ -1,29 +1,18 @@
 {
-  "name": "new",
+  "name": "react-amplitude-hooks-example",
   "version": "1.0.0",
-  "description": "",
-  "keywords": [],
-  "homepage": "https://codesandbox.io/s/new",
-  "main": "src/index.js",
-  "dependencies": {
-    "amplitude-js": "^5.2.2",
-    "prop-types": "^15.7.2",
-    "react": "^16.8.6",
-    "react-amplitude-hooks": "^0.9.2",
-    "react-dom": "^16.8.6",
-    "react-scripts": "^2.1.8"
-  },
-  "devDependencies": {},
+  "description": "Example for react-amplitude-hooks with Vite",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "vite",
+    "build": "vite build"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "dependencies": {
+    "amplitude-js": "^5.11.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.1.4"
+  }
 }
